@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kalkulator kasetonów</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #12151a;
+    --bg-grid: #171b21;
+    --panel: #1a1f26;
+    --panel-border: #2a323d;
+    --panel-border-soft: #232a33;
+    --text: #eef1f4;
+    --text-dim: #8b95a3;
+    --text-faint: #576070;
+    --amber: #ffb020;
+    --amber-soft: rgba(255, 176, 32, 0.14);
+    --amber-glow: rgba(255, 176, 32, 0.35);
+    --teal: #4fd1c0;
+    --teal-soft: rgba(79, 209, 192, 0.14);
+    --warn: #ff8a5c;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% -10%, rgba(255,176,32,0.06), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(79,209,192,0.05), transparent 40%);
+    color: var(--text);
+    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 40px 20px 56px;
+  }
+
+  header {
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+
+  header p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    max-width: 46ch;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .field-label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .profile-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .profile-btn {
+    background: var(--bg-grid);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 12px 8px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    color: var(--text);
+    font-family: inherit;
+  }
+
+  .profile-btn .mm {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .profile-btn .max {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-faint);
+  }
+
+  .profile-btn.active {
+    border-color: var(--amber);
+    background: var(--amber-soft);
+    box-shadow: 0 0 0 1px var(--amber-glow);
+  }
+
+  .profile-btn.active .max { color: var(--text-dim); }
+
+  .dims-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .dim-field { display: flex; flex-direction: column; }
+
+  .dim-field label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .dim-field input {
+    background: var(--bg-grid);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.25rem;
+    font-weight: 500;
+    padding: 12px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .dim-field input:focus {
+    border-color: var(--amber);
+  }
+
+  .times {
+    color: var(--text-faint);
+    font-size: 1.1rem;
+    padding-bottom: 13px;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .result {
+    position: relative;
+    background: linear-gradient(180deg, #1a1f26, #15191f);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 30px 24px 26px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .result::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, var(--amber-glow), transparent 60%);
+    opacity: var(--glow-opacity, 0.5);
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .readout {
+    position: relative;
+    z-index: 1;
+  }
+
+  .price-label, .weight-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .price-value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1.1;
+    text-shadow: 0 0 24px var(--amber-glow);
+  }
+
+  .price-value .cur {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-left: 4px;
+    color: var(--amber);
+    opacity: 0.85;
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--panel-border);
+    margin: 18px auto;
+  }
+
+  .weight-value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--teal);
+    text-shadow: 0 0 18px rgba(79,209,192,0.3);
+  }
+
+  .weight-value .cur {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 3px;
+    opacity: 0.85;
+  }
+
+  .note {
+    margin-top: 18px;
+    font-size: 0.78rem;
+    color: var(--warn);
+    background: rgba(255,138,92,0.08);
+    border: 1px solid rgba(255,138,92,0.25);
+    border-radius: 8px;
+    padding: 8px 12px;
+    position: relative;
+    z-index: 1;
+    display: none;
+  }
+
+  .note.show { display: block; }
+
+  .footer-note {
+    margin-top: 20px;
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 420px) {
+    .price-value { font-size: 2.1rem; }
+    .dims-row { grid-template-columns: 1fr auto 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Kalkulator kasetonów</h1>
+    <p>Podaj wymiary i profil, żeby otrzymać orientacyjną cenę i wagę kasetonu reklamowego.</p>
+  </header>
+
+  <div class="panel">
+    <span class="field-label">Profil</span>
+    <div class="profile-row" id="profileRow">
+      <button class="profile-btn" data-profil="36mm">
+        <span class="mm">36 mm</span>
+        <span class="max">do 200×200 cm</span>
+      </button>
+      <button class="profile-btn" data-profil="60mm">
+        <span class="mm">60 mm</span>
+        <span class="max">do 300×300 cm</span>
+      </button>
+      <button class="profile-btn" data-profil="80mm">
+        <span class="mm">80 mm</span>
+        <span class="max">do 600×400 cm</span>
+      </button>
+    </div>
+
+    <div class="dims-row">
+      <div class="dim-field">
+        <label for="szerokosc">Szerokość (cm)</label>
+        <input type="number" id="szerokosc" inputmode="numeric" min="1" step="1" value="200">
+      </div>
+      <div class="times">×</div>
+      <div class="dim-field">
+        <label for="wysokosc">Wysokość (cm)</label>
+        <input type="number" id="wysokosc" inputmode="numeric" min="1" step="1" value="200">
+      </div>
+    </div>
+  </div>
+
+  <div class="result">
+    <div class="readout">
+      <div class="price-label">Cena</div>
+      <div class="price-value" id="priceOut">— <span class="cur">PLN</span></div>
+      <div class="divider"></div>
+      <div class="weight-label">Waga</div>
+      <div class="weight-value" id="weightOut">— <span class="cur">kg</span></div>
+    </div>
+    <div class="note" id="extrapNote">Wymiary wykraczają poza dane z tabeli cenowej — wynik jest szacunkiem (ekstrapolacja), nie gwarantowaną ceną.</div>
+  </div>
+
+  <div class="footer-note">Ceny i wagi liczone na podstawie tabel z arkusza „Cennik" (interpolacja/ekstrapolacja jak w oryginalnym skrypcie).</div>
+</div>
+
+<script>
+// ---- Dane cenowe (przeniesione 1:1 z arkuszy 36mm / 60mm / 80mm) ----
+const DANE = {
+  "36mm": [
+    [null, 30, 50, 70, 100, 130, 150, 170, 200, null],
+    [30, 270, 290, 300, 310, 370, 380, 390, 400, null],
+    [50, null, 310, 340, 350, 380, 410, 460, 480, "10kg"],
+    [70, null, null, 400, 450, 530, 540, 570, 580, null],
+    [100, null, null, null, 450, 560, 630, 650, 680, "14kg"],
+    [130, null, null, null, null, 680, 690, 860, 900, null],
+    [150, null, null, null, null, null, 840, 870, 920, "20Kg"],
+    [170, null, null, null, null, null, null, 1020, 1090, null],
+    [200, null, null, null, null, null, null, null, 1170, "30Kg"],
+  ],
+  "60mm": [
+    [null, 70, 100, 130, 150, 170, 200, 230, 250, 270, 300, null, null, null, null, null, null, null],
+    [70, 440, 470, 520, 610, 670, 680, 720, 850, 880, 930, null, null, null, null, null, null, null],
+    [100, null, 500, 660, 690, 750, 830, 940, 990, 1030, 1050, "23Kg", null, "18Kg", null, null, "11Kg", null],
+    [130, null, null, 730, 740, 850, 910, 1050, 1100, 1140, 1170, null, null, null, null, null, null, null],
+    [150, null, null, null, 790, 920, 980, 1150, 1180, 1310, 1330, "32Kg", null, "22Kg", null, null, "17Kg", null],
+    [170, null, null, null, null, 1100, 1250, 1340, 1410, 1500, 1540, null, null, null, null, null, null, null],
+    [200, null, null, null, null, null, 1330, 1500, 1550, 1690, 1730, "47Kg", null, "32KG", null, null, null, null],
+    [230, null, null, null, null, null, null, 1850, 1860, 1980, 2000, null, null, null, null, null, null, null],
+    [250, null, null, null, null, null, null, null, 2000, 2050, 2130, null, null, null, null, null, null, null],
+    [270, null, null, null, null, null, null, null, null, 2170, 2220, null, null, null, null, null, null, null],
+    [300, null, null, null, null, null, null, null, null, null, 2450, "60Kg", null, null, null, null, null, null],
+  ],
+  "80mm": [
+    [null, 100, 130, 150, 170, 200, 230, 250, 270, 300, 330, 350, 370, 400, 430, 450, 470, 500, 530, 550, 570, 600],
+    [100, 530, 720, 740, 770, 900, 1050, 1080, 1130, 1150, 1360, 1380, 1450, 1470, 1700, 1740, 1780, 1800, 1930, 2010, 2030, 2060],
+    [130, null, 770, 780, 860, 990, 1130, 1180, 1250, 1270, 1550, 1620, 1690, 1740, 1980, 2000, 2070, 2190, 2230, 2280, 2330, 2350],
+    [150, null, null, 870, 950, 1070, 1180, 1270, 1380, 1410, 1630, 1690, 1850, 1900, 2100, 2130, 2300, 2350, 2400, 2470, 2560, 2580],
+    [170, null, null, null, 1170, 1210, 1440, 1540, 1730, 1770, 2050, 2130, 2230, 2250, 2670, 2690, 2720, 2770, 2900, 2960, 2990, 3030],
+    [200, null, null, null, null, 1290, 1580, 1630, 1760, 1830, 2110, 2140, 2300, 2360, 2890, 2920, 2980, 3030, 3120, 3180, 3290, 3360],
+    [230, null, null, null, null, null, 1960, 1980, 2090, 2110, 2370, 2420, 2720, 2970, 3170, 3220, 3340, 3610, 3730, 3810, 3950, 4000],
+    [250, null, null, null, null, null, null, 2030, 2110, 2250, 2600, 2740, 2850, 3030, 3420, 3470, 3700, 3800, 3890, 3940, 4120, 4170],
+    [270, null, null, null, null, null, null, "46Kg", 2240, 2280, 2710, 2840, 3030, 3100, 3530, 3600, 3860, 3910, 4090, 4100, 4300, 4350],
+    [300, null, null, null, null, null, null, null, null, 2580, 2940, 3020, 3190, 3340, 3550, 3640, 4110, 4190, 4280, 4370, 4610, 4750],
+    [330, null, null, null, null, null, null, null, null, null, null, null, null, "96Kg", null, null, null, "117Kg", null, null, null, "137Kg"],
+    [350, null, null, null, null, "22Kg", null, null, null, "27Kg", null, null, null, "36Kg", null, null, null, "50Kg", null, null, null, "58Kg"],
+    [370, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    [400, null, null, null, null, null, null, null, null, null, null, null, null, 4340, null, null, null, null, null, null, null, null],
+    [430, null, null, null, null, null, null, null, null, null, null, null, null, "107Kg", null, null, null, null, null, null, null, null],
+    [450, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    [470, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    [500, null, null, null, null, null, null, null, null, null, null, null, null, 5610, null, null, null, 7350, null, null, null, null],
+    [530, null, null, null, null, null, null, null, null, null, null, null, null, "150Kg", null, null, null, "184Kg", null, null, null, null],
+    [550, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    [570, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    [600, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7900, null, null, null, 8770],
+  ],
+};
+
+// ---- Logika przeniesiona 1:1 z WYCENA_KASETONU / WAGA_KASETONU (Apps Script) ----
+
+function pobierzCene(data, r, c) {
+  if (r < 0 || r >= data.length || c < 0 || c >= data[0].length) return null;
+  const v = data[r][c];
+  if (typeof v === "number" && v > 0) return v;
+  return null;
+}
+
+function wyliczCene(szerokosc, wysokosc, profil) {
+  const data = DANE[profil];
+  if (!data || !szerokosc || !wysokosc) return null;
+
+  const minDim = Math.min(szerokosc, wysokosc);
+  const maxDim = Math.max(szerokosc, wysokosc);
+
+  const szerNaglowki = [];
+  for (let j = 1; j < data[0].length; j++) {
+    const val = data[0][j];
+    if (typeof val === "number" && val > 0) szerNaglowki.push({ val, colIdx: j });
+  }
+  const wysNaglowki = [];
+  for (let i = 1; i < data.length; i++) {
+    const val = data[i][0];
+    if (typeof val === "number" && val > 0) wysNaglowki.push({ val, rowIdx: i });
+  }
+  if (szerNaglowki.length === 0 || wysNaglowki.length === 0) return null;
+
+  function szukajCeny(wA, wB) {
+    let cIdx = -1, rIdx = -1;
+    for (const h of szerNaglowki) { if (h.val === wA) { cIdx = h.colIdx; break; } }
+    for (const h of wysNaglowki) { if (h.val === wB) { rIdx = h.rowIdx; break; } }
+    if (cIdx !== -1 && rIdx !== -1) return pobierzCene(data, rIdx, cIdx);
+    return null;
+  }
+
+  let dokladna = szukajCeny(maxDim, minDim);
+  if (dokladna === null) dokladna = szukajCeny(minDim, maxDim);
+  if (dokladna !== null) return Math.round(dokladna * 100) / 100;
+
+  function interpolujWzdluzLinii(stalDim, zmiennyDim) {
+    let colIdx = -1;
+    for (const h of szerNaglowki) { if (h.val === stalDim) { colIdx = h.colIdx; break; } }
+    if (colIdx === -1) return null;
+
+    let nizszyWym = null, nizszaCena = null;
+    let wyzszyWym = null, wyzszaCena = null;
+
+    for (const h of wysNaglowki) {
+      const w = h.val, r = h.rowIdx;
+      const c = pobierzCene(data, r, colIdx);
+      if (c !== null) {
+        if (w <= zmiennyDim && (nizszyWym === null || w > nizszyWym)) { nizszyWym = w; nizszaCena = c; }
+        if (w >= zmiennyDim && (wyzszyWym === null || w < wyzszyWym)) { wyzszyWym = w; wyzszaCena = c; }
+      }
+    }
+    if (nizszaCena !== null && wyzszaCena !== null) {
+      if (nizszyWym === wyzszyWym) return nizszaCena;
+      const t = (zmiennyDim - nizszyWym) / (wyzszyWym - nizszyWym);
+      return (1 - t) * nizszaCena + t * wyzszaCena;
+    }
+    return nizszaCena !== null ? nizszaCena : (wyzszaCena !== null ? wyzszaCena : null);
+  }
+
+  let cena = interpolujWzdluzLinii(maxDim, minDim);
+  if (cena === null) cena = interpolujWzdluzLinii(minDim, maxDim);
+
+  const maxSzer = szerNaglowki[szerNaglowki.length - 1].val;
+  const maxWys = wysNaglowki[wysNaglowki.length - 1].val;
+
+  if (cena === null) {
+    const powRzeczywista = (szerokosc / 100) * (wysokosc / 100);
+    const powMaxTabela = (Math.min(maxDim, maxSzer) / 100) * (Math.min(minDim, maxWys) / 100);
+    cena = 4750;
+    const cenaZaM2 = (cena / powMaxTabela) * 0.85;
+    cena += (powRzeczywista - powMaxTabela) * cenaZaM2;
+  }
+
+  if (maxDim > maxSzer || minDim > maxWys) {
+    const powRzeczywista = (szerokosc / 100) * (wysokosc / 100);
+    const powMaxTabela = (Math.min(maxDim, maxSzer) / 100) * (Math.min(minDim, maxWys) / 100);
+    const cenaZaM2 = cena > 0 ? (cena / powMaxTabela) * 0.85 : 250;
+    cena += (powRzeczywista - powMaxTabela) * cenaZaM2;
+  }
+
+  return Math.round(cena * 100) / 100;
+}
+
+function wyliczWage(szerokosc, wysokosc, profil) {
+  if (!szerokosc || !wysokosc) return null;
+  const powM2 = (szerokosc / 100) * (wysokosc / 100);
+  let kgPerM2 = 8.0;
+  const p = profil.toLowerCase();
+  if (p.indexOf("60") !== -1) kgPerM2 = 10.0;
+  else if (p.indexOf("80") !== -1) kgPerM2 = 7.8;
+  return Math.round(powM2 * kgPerM2 * 10) / 10;
+}
+
+function przekraczaTabele(szerokosc, wysokosc, profil) {
+  const data = DANE[profil];
+  const szerHeaders = data[0].filter(v => typeof v === "number");
+  const wysHeaders = data.map(r => r[0]).filter(v => typeof v === "number");
+  const maxSzer = Math.max(...szerHeaders);
+  const maxWys = Math.max(...wysHeaders);
+  const minDim = Math.min(szerokosc, wysokosc);
+  const maxDim = Math.max(szerokosc, wysokosc);
+  return maxDim > maxSzer || minDim > maxWys;
+}
+
+// ---- UI ----
+let profil = "60mm";
+const priceOut = document.getElementById("priceOut");
+const weightOut = document.getElementById("weightOut");
+const extrapNote = document.getElementById("extrapNote");
+const szerInput = document.getElementById("szerokosc");
+const wysInput = document.getElementById("wysokosc");
+const profileRow = document.getElementById("profileRow");
+const resultBox = document.querySelector(".result");
+
+function fmtPLN(n) {
+  return n.toLocaleString("pl-PL", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function przelicz() {
+  const szer = parseFloat(szerInput.value);
+  const wys = parseFloat(wysInput.value);
+
+  if (!szer || !wys || szer <= 0 || wys <= 0) {
+    priceOut.innerHTML = '— <span class="cur">PLN</span>';
+    weightOut.innerHTML = '— <span class="cur">kg</span>';
+    extrapNote.classList.remove("show");
+    resultBox.style.setProperty("--glow-opacity", "0.15");
+    return;
+  }
+
+  const cena = wyliczCene(szer, wys, profil);
+  const waga = wyliczWage(szer, wys, profil);
+
+  priceOut.innerHTML = (cena !== null ? fmtPLN(cena) : "—") + ' <span class="cur">PLN</span>';
+  weightOut.innerHTML = (waga !== null ? fmtPLN(waga) : "—") + ' <span class="cur">kg</span>';
+
+  const poza = przekraczaTabele(szer, wys, profil);
+  extrapNote.classList.toggle("show", poza);
+  resultBox.style.setProperty("--glow-opacity", poza ? "0.25" : "0.5");
+}
+
+profileRow.addEventListener("click", (e) => {
+  const btn = e.target.closest(".profile-btn");
+  if (!btn) return;
+  profil = btn.dataset.profil;
+  document.querySelectorAll(".profile-btn").forEach(b => b.classList.toggle("active", b === btn));
+  przelicz();
+});
+
+szerInput.addEventListener("input", przelicz);
+wysInput.addEventListener("input", przelicz);
+
+document.querySelector('[data-profil="60mm"]').classList.add("active");
+przelicz();
+</script>
+</body>
+</html>
