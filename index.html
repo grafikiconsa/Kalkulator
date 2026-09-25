@@ -25,13 +25,13 @@
     --warn: #ff8a5c;
     --radius: 14px;
   }
-
+ 
   * { box-sizing: border-box; }
-
+ 
   html {
     scroll-padding-top: env(safe-area-inset-top, 0px);
   }
-
+ 
   body {
     margin: 0;
     min-height: 100%;
@@ -45,24 +45,24 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
     -webkit-font-smoothing: antialiased;
   }
-
+ 
   .wrap {
     max-width: 620px;
     margin: 0 auto;
     padding: 40px 20px 56px;
   }
-
+ 
   header {
     margin-bottom: 28px;
   }
-
+ 
   h1 {
     font-size: 1.7rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     margin: 0 0 8px;
   }
-
+ 
   header p {
     margin: 0;
     color: var(--text-dim);
@@ -70,7 +70,7 @@
     line-height: 1.5;
     max-width: 46ch;
   }
-
+ 
   .panel {
     background: var(--panel);
     border: 1px solid var(--panel-border);
@@ -78,7 +78,7 @@
     padding: 22px;
     margin-bottom: 18px;
   }
-
+ 
   .field-label {
     font-size: 0.78rem;
     color: var(--text-dim);
@@ -86,14 +86,14 @@
     margin-bottom: 10px;
     display: block;
   }
-
+ 
   .profile-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-bottom: 22px;
   }
-
+ 
   .profile-btn {
     background: var(--bg-grid);
     border: 1px solid var(--panel-border);
@@ -105,7 +105,7 @@
     color: var(--text);
     font-family: inherit;
   }
-
+ 
   .profile-btn .mm {
     display: block;
     font-family: "JetBrains Mono", monospace;
@@ -113,37 +113,37 @@
     font-weight: 600;
     margin-bottom: 3px;
   }
-
+ 
   .profile-btn .max {
     display: block;
     font-size: 0.72rem;
     color: var(--text-faint);
   }
-
+ 
   .profile-btn.active {
     border-color: var(--amber);
     background: var(--amber-soft);
     box-shadow: 0 0 0 1px var(--amber-glow);
   }
-
+ 
   .profile-btn.active .max { color: var(--text-dim); }
-
+ 
   .dims-row {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     gap: 12px;
     align-items: end;
   }
-
+ 
   .dim-field { display: flex; flex-direction: column; }
-
+ 
   .dim-field label {
     font-size: 0.78rem;
     color: var(--text-dim);
     font-weight: 500;
     margin-bottom: 8px;
   }
-
+ 
   .dim-field input {
     background: var(--bg-grid);
     border: 1px solid var(--panel-border);
@@ -157,18 +157,18 @@
     outline: none;
     transition: border-color 0.15s ease;
   }
-
+ 
   .dim-field input:focus {
     border-color: var(--amber);
   }
-
+ 
   .times {
     color: var(--text-faint);
     font-size: 1.1rem;
     padding-bottom: 13px;
     font-family: "JetBrains Mono", monospace;
   }
-
+ 
   .result {
     position: relative;
     background: linear-gradient(180deg, #1a1f26, #15191f);
@@ -178,7 +178,7 @@
     text-align: center;
     overflow: hidden;
   }
-
+ 
   .result::before {
     content: "";
     position: absolute;
@@ -188,19 +188,19 @@
     transition: opacity 0.25s ease;
     pointer-events: none;
   }
-
+ 
   .readout {
     position: relative;
     z-index: 1;
   }
-
+ 
   .price-label, .weight-label {
     font-size: 0.75rem;
     color: var(--text-dim);
     letter-spacing: 0.02em;
     margin-bottom: 6px;
   }
-
+ 
   .price-value {
     font-family: "JetBrains Mono", monospace;
     font-size: 2.6rem;
@@ -209,7 +209,7 @@
     line-height: 1.1;
     text-shadow: 0 0 24px var(--amber-glow);
   }
-
+ 
   .price-value .cur {
     font-size: 1.1rem;
     font-weight: 500;
@@ -217,14 +217,14 @@
     color: var(--amber);
     opacity: 0.85;
   }
-
+ 
   .divider {
     width: 40px;
     height: 1px;
     background: var(--panel-border);
     margin: 18px auto;
   }
-
+ 
   .weight-value {
     font-family: "JetBrains Mono", monospace;
     font-size: 1.5rem;
@@ -232,14 +232,14 @@
     color: var(--teal);
     text-shadow: 0 0 18px rgba(79,209,192,0.3);
   }
-
+ 
   .weight-value .cur {
     font-size: 0.9rem;
     font-weight: 500;
     margin-left: 3px;
     opacity: 0.85;
   }
-
+ 
   .note {
     margin-top: 18px;
     font-size: 0.78rem;
@@ -252,9 +252,9 @@
     z-index: 1;
     display: none;
   }
-
+ 
   .note.show { display: block; }
-
+ 
   .footer-note {
     margin-top: 20px;
     font-size: 0.78rem;
@@ -262,7 +262,7 @@
     text-align: center;
     line-height: 1.5;
   }
-
+ 
   @media (max-width: 420px) {
     .price-value { font-size: 2.1rem; }
     .dims-row { grid-template-columns: 1fr auto 1fr; }
@@ -275,7 +275,7 @@
     <h1>Kalkulator kasetonów</h1>
     <p>Podaj wymiary i profil, żeby otrzymać orientacyjną cenę i wagę kasetonu reklamowego.</p>
   </header>
-
+ 
   <div class="panel">
     <span class="field-label">Profil</span>
     <div class="profile-row" id="profileRow">
@@ -292,7 +292,7 @@
         <span class="max">do 600×400 cm</span>
       </button>
     </div>
-
+ 
     <div class="dims-row">
       <div class="dim-field">
         <label for="szerokosc">Szerokość (cm)</label>
@@ -305,7 +305,7 @@
       </div>
     </div>
   </div>
-
+ 
   <div class="result">
     <div class="readout">
       <div class="price-label">Cena</div>
@@ -316,10 +316,10 @@
     </div>
     <div class="note" id="extrapNote">Wymiary wykraczają poza dane z tabeli cenowej — wynik jest szacunkiem (ekstrapolacja), nie gwarantowaną ceną.</div>
   </div>
-
+ 
   <div class="footer-note">Ceny i wagi liczone na podstawie tabel z arkusza „Cennik" (interpolacja/ekstrapolacja jak w oryginalnym skrypcie).</div>
 </div>
-
+ 
 <script>
 // ---- Dane cenowe (przeniesione 1:1 z arkuszy 36mm / 60mm / 80mm) ----
 const DANE = {
@@ -372,23 +372,23 @@ const DANE = {
     [600, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7900, null, null, null, 8770],
   ],
 };
-
+ 
 // ---- Logika przeniesiona 1:1 z WYCENA_KASETONU / WAGA_KASETONU (Apps Script) ----
-
+ 
 function pobierzCene(data, r, c) {
   if (r < 0 || r >= data.length || c < 0 || c >= data[0].length) return null;
   const v = data[r][c];
   if (typeof v === "number" && v > 0) return v;
   return null;
 }
-
+ 
 function wyliczCene(szerokosc, wysokosc, profil) {
   const data = DANE[profil];
   if (!data || !szerokosc || !wysokosc) return null;
-
+ 
   const minDim = Math.min(szerokosc, wysokosc);
   const maxDim = Math.max(szerokosc, wysokosc);
-
+ 
   const szerNaglowki = [];
   for (let j = 1; j < data[0].length; j++) {
     const val = data[0][j];
@@ -400,7 +400,7 @@ function wyliczCene(szerokosc, wysokosc, profil) {
     if (typeof val === "number" && val > 0) wysNaglowki.push({ val, rowIdx: i });
   }
   if (szerNaglowki.length === 0 || wysNaglowki.length === 0) return null;
-
+ 
   function szukajCeny(wA, wB) {
     let cIdx = -1, rIdx = -1;
     for (const h of szerNaglowki) { if (h.val === wA) { cIdx = h.colIdx; break; } }
@@ -408,22 +408,29 @@ function wyliczCene(szerokosc, wysokosc, profil) {
     if (cIdx !== -1 && rIdx !== -1) return pobierzCene(data, rIdx, cIdx);
     return null;
   }
-
+ 
+  // Dane w tabeli są trójkątne: cena dla pary wymiarów jest zapisana tylko
+  // raz, pod kluczem (kolumna=większy wymiar, wiersz=mniejszy wymiar).
+  // Ten helper zawsze ustawia kolejność poprawnie, niezależnie od tego, który
+  // z argumentów jest w danym momencie większy - dzięki temu każde
+  // wyszukiwanie pary (a, b) trafia we właściwą komórkę tabeli.
+  function cenaDlaPary(a, b) {
+    let c = szukajCeny(Math.max(a, b), Math.min(a, b));
+    if (c === null) c = szukajCeny(Math.min(a, b), Math.max(a, b));
+    return c;
+  }
+ 
   let dokladna = szukajCeny(maxDim, minDim);
   if (dokladna === null) dokladna = szukajCeny(minDim, maxDim);
   if (dokladna !== null) return Math.round(dokladna * 100) / 100;
-
+ 
   function interpolujWzdluzLinii(stalDim, zmiennyDim) {
-    let colIdx = -1;
-    for (const h of szerNaglowki) { if (h.val === stalDim) { colIdx = h.colIdx; break; } }
-    if (colIdx === -1) return null;
-
     let nizszyWym = null, nizszaCena = null;
     let wyzszyWym = null, wyzszaCena = null;
-
+ 
     for (const h of wysNaglowki) {
-      const w = h.val, r = h.rowIdx;
-      const c = pobierzCene(data, r, colIdx);
+      const w = h.val;
+      const c = cenaDlaPary(stalDim, w);
       if (c !== null) {
         if (w <= zmiennyDim && (nizszyWym === null || w > nizszyWym)) { nizszyWym = w; nizszaCena = c; }
         if (w >= zmiennyDim && (wyzszyWym === null || w < wyzszyWym)) { wyzszyWym = w; wyzszaCena = c; }
@@ -436,13 +443,13 @@ function wyliczCene(szerokosc, wysokosc, profil) {
     }
     return nizszaCena !== null ? nizszaCena : (wyzszaCena !== null ? wyzszaCena : null);
   }
-
+ 
   let cena = interpolujWzdluzLinii(maxDim, minDim);
   if (cena === null) cena = interpolujWzdluzLinii(minDim, maxDim);
-
+ 
   const maxSzer = szerNaglowki[szerNaglowki.length - 1].val;
   const maxWys = wysNaglowki[wysNaglowki.length - 1].val;
-
+ 
   if (cena === null) {
     const powRzeczywista = (szerokosc / 100) * (wysokosc / 100);
     const powMaxTabela = (Math.min(maxDim, maxSzer) / 100) * (Math.min(minDim, maxWys) / 100);
@@ -450,17 +457,17 @@ function wyliczCene(szerokosc, wysokosc, profil) {
     const cenaZaM2 = (cena / powMaxTabela) * 0.85;
     cena += (powRzeczywista - powMaxTabela) * cenaZaM2;
   }
-
+ 
   if (maxDim > maxSzer || minDim > maxWys) {
     const powRzeczywista = (szerokosc / 100) * (wysokosc / 100);
     const powMaxTabela = (Math.min(maxDim, maxSzer) / 100) * (Math.min(minDim, maxWys) / 100);
     const cenaZaM2 = cena > 0 ? (cena / powMaxTabela) * 0.85 : 250;
     cena += (powRzeczywista - powMaxTabela) * cenaZaM2;
   }
-
+ 
   return Math.round(cena * 100) / 100;
 }
-
+ 
 function wyliczWage(szerokosc, wysokosc, profil) {
   if (!szerokosc || !wysokosc) return null;
   const powM2 = (szerokosc / 100) * (wysokosc / 100);
@@ -470,7 +477,7 @@ function wyliczWage(szerokosc, wysokosc, profil) {
   else if (p.indexOf("80") !== -1) kgPerM2 = 7.8;
   return Math.round(powM2 * kgPerM2 * 10) / 10;
 }
-
+ 
 function przekraczaTabele(szerokosc, wysokosc, profil) {
   const data = DANE[profil];
   const szerHeaders = data[0].filter(v => typeof v === "number");
@@ -481,7 +488,7 @@ function przekraczaTabele(szerokosc, wysokosc, profil) {
   const maxDim = Math.max(szerokosc, wysokosc);
   return maxDim > maxSzer || minDim > maxWys;
 }
-
+ 
 // ---- UI ----
 let profil = "60mm";
 const priceOut = document.getElementById("priceOut");
@@ -491,15 +498,15 @@ const szerInput = document.getElementById("szerokosc");
 const wysInput = document.getElementById("wysokosc");
 const profileRow = document.getElementById("profileRow");
 const resultBox = document.querySelector(".result");
-
+ 
 function fmtPLN(n) {
   return n.toLocaleString("pl-PL", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
-
+ 
 function przelicz() {
   const szer = parseFloat(szerInput.value);
   const wys = parseFloat(wysInput.value);
-
+ 
   if (!szer || !wys || szer <= 0 || wys <= 0) {
     priceOut.innerHTML = '— <span class="cur">PLN</span>';
     weightOut.innerHTML = '— <span class="cur">kg</span>';
@@ -507,18 +514,18 @@ function przelicz() {
     resultBox.style.setProperty("--glow-opacity", "0.15");
     return;
   }
-
+ 
   const cena = wyliczCene(szer, wys, profil);
   const waga = wyliczWage(szer, wys, profil);
-
+ 
   priceOut.innerHTML = (cena !== null ? fmtPLN(cena) : "—") + ' <span class="cur">PLN</span>';
   weightOut.innerHTML = (waga !== null ? fmtPLN(waga) : "—") + ' <span class="cur">kg</span>';
-
+ 
   const poza = przekraczaTabele(szer, wys, profil);
   extrapNote.classList.toggle("show", poza);
   resultBox.style.setProperty("--glow-opacity", poza ? "0.25" : "0.5");
 }
-
+ 
 profileRow.addEventListener("click", (e) => {
   const btn = e.target.closest(".profile-btn");
   if (!btn) return;
@@ -526,12 +533,13 @@ profileRow.addEventListener("click", (e) => {
   document.querySelectorAll(".profile-btn").forEach(b => b.classList.toggle("active", b === btn));
   przelicz();
 });
-
+ 
 szerInput.addEventListener("input", przelicz);
 wysInput.addEventListener("input", przelicz);
-
+ 
 document.querySelector('[data-profil="60mm"]').classList.add("active");
 przelicz();
 </script>
 </body>
 </html>
+ 
